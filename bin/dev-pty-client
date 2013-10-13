@@ -3,7 +3,7 @@
 require 'socket'
 require 'io/console'
 
-require_relative 'lib/server/app'
+require_relative '../lib/server/app'
 
 Thread.abort_on_exception = true
 
