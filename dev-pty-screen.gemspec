@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name          = 'dev.pty.screen'
+  s.name          = 'dev-pty-screen'
   s.version       = '0.0.1'
   s.date          = '2013-10-13'
   s.summary       = "VIM screen sharing that doesn't suck"
@@ -15,7 +15,7 @@ HEREDOC
   s.homepage      = 'http://github.com/dapplebeforedawn'
   s.license       = 'MIT'
   s.files         = Dir.glob("{bin,lib}/**/*")
-  s.executables   = %w[ tty_md ]
+  s.executables   = %w[ dev-pty-server dev-pty-client ]
   s.require_paths = %w[ lib/server lib/client ]
 
   s.add_dependency 'celluloid',  '0.15.2'
