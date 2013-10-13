@@ -1,0 +1,7 @@
+#! /usr/bin/env ruby
+
+require_relative 'lib/pty_server'
+Thread.abort_on_exception = true
+
+PtyServer.new.start
+sleep
