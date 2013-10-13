@@ -1,5 +1,5 @@
 require 'timeout'
-require_relative '../lib/key_server.rb'
+require_relative '../../lib/server/key_server.rb'
 
 describe KeyServer do
   before do

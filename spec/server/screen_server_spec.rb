@@ -1,5 +1,5 @@
 require 'timeout'
-require_relative '../lib/screen_server.rb'
+require_relative '../../lib/server/screen_server.rb'
 
 describe ScreenServer do
   before do
