@@ -7,7 +7,7 @@ module Options
     OptionParser.new do |opts|
       opts.on("-l", "--key_port=val",      Integer) { |arg| options.key_port     = arg }
       opts.on("-d", "--screen_port=val",   Integer) { |arg| options.screen_port  = arg }
-      opts.on("-s", "--server_host=val",   String)  { |arg| options.screen_host  = arg }
+      opts.on("-s", "--server_host=val",   String)  { |arg| options.server_host  = arg }
       opts.on("-h", "--help")                       { exec "more #{__FILE__}"          }
     end.parse!
     options
