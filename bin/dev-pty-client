@@ -15,8 +15,10 @@ Thread.new do
   loop { STDOUT.write screen_sock.readpartial( READSIZE ) }
 end
 
+# getch is the reason the arrow keys don't work.
+# how to fix?  I am dissapoint.
 Thread.new do
-  loop { key_sock.putc $stdin.getch }
+  loop { key_sock.write STDIN.getch }
 end
 
 sleep
