@@ -6,12 +6,13 @@ require 'io/console'
 require_relative '../lib/client/app'
 
 Thread.abort_on_exception = true
+READSIZE = 4096
 
 key_sock    = Socket.tcp(App.options.server_host,    App.options.key_port)
 screen_sock = Socket.tcp(App.options.server_host, App.options.screen_port)
 
 Thread.new do
-  loop { IO.copy_stream screen_sock, STDOUT }
+  loop { STDOUT.write screen_sock.readpartial( READSIZE ) }
 end
 
 Thread.new do

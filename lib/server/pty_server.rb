@@ -1,5 +1,6 @@
 require 'pty'
 require 'io/console'
+require 'stringio'
 
 require_relative 'screen_server'
 require_relative 'key_server'
@@ -7,6 +8,7 @@ require_relative 'vim_interface'
 require_relative 'app'
 
 Thread.abort_on_exception = true
+READSIZE = 4096
 
 class PtyServer
   def initialize
@@ -34,7 +36,7 @@ class PtyServer
   def screen_loop
     Thread.new do
       loop {
-        @screen_server.async.write @pty_m.read( 1 )
+        @screen_server.async.write @pty_m.readpartial( READSIZE )
       }
     end
   end
