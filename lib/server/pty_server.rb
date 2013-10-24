@@ -1,6 +1,5 @@
 require 'pty'
 require 'io/console'
-require 'stringio'
 
 require_relative 'screen_server'
 require_relative 'key_server'
