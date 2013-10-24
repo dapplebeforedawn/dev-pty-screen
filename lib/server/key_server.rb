@@ -3,6 +3,7 @@ require 'celluloid'
 Thread.abort_on_exception = true
 
 class KeyServer
+  READSIZE = 4096
   include Celluloid
 
   def initialize port, callback
@@ -22,7 +23,7 @@ class KeyServer
       socket.sync = true
       Thread.new do
         loop {
-          @callback[ socket.getc ]
+          @callback[ socket.readpartial( READSIZE ) ]
         }
       end
     }
