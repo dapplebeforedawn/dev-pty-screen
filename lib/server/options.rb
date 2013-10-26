@@ -10,7 +10,7 @@ module Options
       opts.on("-s", "--screen_port=val",  Integer) { |arg| options.screen_port = arg }
       opts.on("-r", "--rows=val",         Integer) { |arg| options.rows        = arg }
       opts.on("-c", "--columns=val",      Integer) { |arg| options.columns     = arg }
-      opts.on("-h", "--help")                      { exec "more #{__FILE__}"         }
+      opts.on("-h", "--help")                      { puts opts; exit }
     end.parse!
     options
   end

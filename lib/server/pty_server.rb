@@ -15,7 +15,7 @@ class PtyServer
     @vim_interface  = VimInterface.new @pty_m
     @screen_server  = ScreenServer.new App.options.screen_port
     @key_server     = KeyServer.new App.options.key_port, key_callback
-    @pty_s.winsize  = [ 35, 100 ]
+    @pty_s.winsize  = [ App.options.rows, App.options.columns ]
   end
 
   def start
