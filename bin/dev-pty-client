@@ -14,6 +14,8 @@ class DevPtyClient
 
 
   def initialize
+    startup_message
+
     @key_sock    = Socket.tcp(App.options.server_host,    App.options.key_port)
     @screen_sock = Socket.tcp(App.options.server_host, App.options.screen_port)
 
@@ -42,11 +44,25 @@ class DevPtyClient
   end
 
   def prompt_exit
-    puts CLEAR
+    clear_screen
     print "Disconnect from dev-pty-screen?(y/n): "
     exit if gets.match /y/i
   end
 
+  def clear_screen
+    puts CLEAR
+  end
+
+  def startup_message
+    clear_screen
+    message_lines = File.readlines App.path.parent.join('doc', 'welcome.txt')
+    longest_line  = message_lines.max_by(&:length).length
+    screen_width  = STDOUT.winsize.last
+    offset        = Array.new(screen_width/2 - longest_line/2, " ")
+    message_lines.each do |line|
+      print  offset * '' + line
+    end
+  end
 end
 
 DevPtyClient.new and sleep

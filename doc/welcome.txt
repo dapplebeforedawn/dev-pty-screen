@@ -1,0 +1,16 @@
+
+
+
+               Welcome to dev/pty/screen!
+               --------------------------
+
+               Type any vim command to
+                  refresh the screen.
+
+
+ Support:
+   https://github.com/dapplebeforedawn/dev-pty-screen
+   markjlorenz@gmail.com  |  @soodesune
+
+
+
