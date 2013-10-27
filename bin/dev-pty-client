@@ -6,19 +6,47 @@ require 'io/console'
 require_relative '../lib/client/app'
 
 Thread.abort_on_exception = true
-READSIZE = 4096
 
-key_sock    = Socket.tcp(App.options.server_host,    App.options.key_port)
-screen_sock = Socket.tcp(App.options.server_host, App.options.screen_port)
+class DevPtyClient
+  READSIZE = 4096
+  CLEAR    = "\e[H\e[2J"
+  SUSPEND  = ?\C-z
 
-Thread.new do
-  loop { STDOUT.write screen_sock.readpartial( READSIZE ) }
+
+  def initialize
+    @key_sock    = Socket.tcp(App.options.server_host,    App.options.key_port)
+    @screen_sock = Socket.tcp(App.options.server_host, App.options.screen_port)
+
+    Thread.new &screen_loop
+    Thread.new &key_loop
+  end
+
+  def screen_loop
+    -> do
+      loop { STDOUT.write @screen_sock.readpartial( READSIZE ) }
+    end
+  end
+
+  def key_loop
+    -> do
+      loop {
+        key = STDIN.getch
+        prompt_exit if suspend?(key)
+        @key_sock.write key
+      }
+    end
+  end
+
+  def suspend?(key)
+    key == SUSPEND
+  end
+
+  def prompt_exit
+    puts CLEAR
+    print "Disconnect from dev-pty-screen?(y/n): "
+    exit if gets.match /y/i
+  end
+
 end
 
-# getch is the reason the arrow keys don't work.
-# how to fix?  I am dissapoint.
-Thread.new do
-  loop { key_sock.write STDIN.getch }
-end
-
-sleep
+DevPtyClient.new and sleep

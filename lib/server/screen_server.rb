@@ -25,7 +25,17 @@ class ScreenServer
 
   # screen_server.async.write
   def write update
-    @sockets.each {|s| s.write update }
+    @sockets.each { |s| safe_write(s, update) }
   end
+
+  def safe_write(socket, update)
+    socket.write update
+    rescue Errno::EPIPE
+      socket_info = Socket.unpack_sockaddr_in(socket.local_address)
+      puts "A screen client disconnected: #{socket_info}"
+      @sockets.delete(socket)
+      return false
+  end
+  private :safe_write
 
 end

@@ -23,11 +23,21 @@ class KeyServer
       socket.sync = true
       Thread.new do
         loop {
-          @callback[ socket.readpartial( READSIZE ) ]
+          key_data = read_key(socket) or break
+          @callback.( key_data )
         }
       end
     }
   end
+
+  def read_key(socket)
+    return socket.readpartial( READSIZE )
+    rescue EOFError
+      socket_info = Socket.unpack_sockaddr_in(socket.local_address)
+      puts "A key client disconnected: #{socket_info}"
+      return false
+  end
+  private :read_key
 
 end
 
