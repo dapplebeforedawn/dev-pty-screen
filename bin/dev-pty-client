@@ -28,30 +28,47 @@ class DevPtyClient
       loop { STDOUT.write @screen_sock.readpartial( READSIZE ) }
     end
   end
+  private :screen_loop
 
   def key_loop
     -> do
       loop {
         key = STDIN.getch
-        prompt_exit if suspend?(key)
-        @key_sock.write key
+        prompt_exit(key) or @key_sock.write(key)
       }
     end
   end
+  private :key_loop
 
   def suspend?(key)
     key == SUSPEND
   end
+  private :suspend?
 
-  def prompt_exit
+  def prompt_exit(key)
+    return false unless suspend?(key)
     clear_screen
     print "Disconnect from dev-pty-screen?(y/n): "
-    exit if gets.match /y/i
+    will_exit if gets.match /y/i
+    wont_exit
   end
+  private :prompt_exit
+
+  def will_exit
+    exit
+  end
+  private :will_exit
+
+  def wont_exit
+    print "Run any vim command to re-draw the screen."
+    return true
+  end
+  private :wont_exit
 
   def clear_screen
     puts CLEAR
   end
+  private :clear_screen
 
   def startup_message
     clear_screen
@@ -63,6 +80,7 @@ class DevPtyClient
       print  offset * '' + line
     end
   end
+  private :startup_message
 end
 
 at_exit { `reset` }
