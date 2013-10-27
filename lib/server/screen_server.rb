@@ -30,12 +30,21 @@ class ScreenServer
 
   def safe_write(socket, update)
     socket.write update
-    rescue Errno::EPIPE
-      socket_info = Socket.unpack_sockaddr_in(socket.local_address)
-      puts "A screen client disconnected: #{socket_info}"
-      @sockets.delete(socket)
-      return false
+    rescue Errno::EPIPE; disconnect(socket)
   end
   private :safe_write
+
+  def disconnect(socket)
+    disconnect_message socket
+    @sockets.delete    socket
+    return false
+  end
+  private :disconnect
+
+  def disconnect_message(socket)
+    socket_info = Socket.unpack_sockaddr_in(socket.local_address)
+    puts "A screen client disconnected: #{socket_info}"
+  end
+  private :disconnect_message
 
 end

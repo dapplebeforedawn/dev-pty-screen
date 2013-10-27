@@ -32,12 +32,15 @@ class KeyServer
 
   def read_key(socket)
     return socket.readpartial( READSIZE )
-    rescue EOFError
-      socket_info = Socket.unpack_sockaddr_in(socket.local_address)
-      puts "A key client disconnected: #{socket_info}"
-      return false
+    rescue EOFError; disconnected(socket)
   end
   private :read_key
+
+  def disconnected(socket)
+    socket_info = Socket.unpack_sockaddr_in(socket.local_address)
+    puts "A key client disconnected: #{socket_info}"
+    return false
+  end
 
 end
 
