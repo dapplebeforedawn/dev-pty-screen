@@ -65,4 +65,5 @@ class DevPtyClient
   end
 end
 
+at_exit { `reset` }
 DevPtyClient.new and sleep
