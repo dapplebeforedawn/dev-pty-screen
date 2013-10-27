@@ -56,6 +56,8 @@ Requires Ruby 2.0.0 or better.
     :tabnew <cr>
   ```
 
+  - Quitting: ^Z (ctrl+z) prompts your client to quit.  All other keys are forwarded to the server.
+
 ## Considerations:
   This approach has a few draw-backs compared to the run-your-own-VIM tact that /dev/pty/vim uses (and a few advantages)
 
@@ -73,8 +75,8 @@ Requires Ruby 2.0.0 or better.
  - When a client initially connects they need to press key to get STDOUT to re-paint.  Telling VIM to create a new tab (`:tabnew`) is a simple work around for now.
  - Notifications about who is typing
  - Custom .vimrcs that are applied when a client is typing
- - Right now tying ctrl+z on a client suspends the server.  That's less than ideal :-(
  - Replace all the `Thread.new` calls with a celluloid actor
+ - Seriously, why are arrow keys so hard to work with !?
 
 ## Application Structure
   ```
