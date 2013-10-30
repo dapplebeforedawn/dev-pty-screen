@@ -51,7 +51,7 @@ or:
   - On the computer hosting the code to work on.
   ```bash
     cd /a/directory/with/some/code
-    dev-pty-server
+    dev-pty-server -c $COLUMNS -r $LINES
   ```
 
   - On each client
