@@ -30,15 +30,21 @@
 Requires Ruby 2.0.0 or better.
 
 ```bash
+  gem install dev-pty-screen
+```
+
+or:
+
+```bash
   # clone this repository
   git clone https://github.com/dapplebeforedawn/dev-pty-screen
 
   # build the gem
   cd dev-pty-screen
-  gem build dev-pty-screen.gemspec
+  rake build
 
-  # install the gem (the version may vary)
-  gem install dev-pty-screen-0.0.1.gem
+  # install the gem
+  rake install
 ```
 
 ## Getting Started:

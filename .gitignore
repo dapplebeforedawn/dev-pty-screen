@@ -1,2 +1,15 @@
+*.gem
+*.rbc
+.bundle
+.config
+.yardoc
+Gemfile.lock
+InstalledFiles
+_yardoc
+coverage
+lib/bundler/man
+pkg
+rdoc
+spec/reports
 tmp/*
 !tmp/.gitignore
