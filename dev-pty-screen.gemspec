@@ -14,7 +14,7 @@ HEREDOC
   s.email         = 'markjlorenz@gmail.com'
   s.homepage      = 'http://github.com/dapplebeforedawn'
   s.license       = 'MIT'
-  s.files         = Dir.glob("{bin,lib}/**/*")
+  s.files         = Dir.glob("{bin,lib,doc}/**/*")
   s.executables   = %w[ dev-pty-server dev-pty-client ]
   s.require_paths = %w[ lib/server lib/client ]
 
