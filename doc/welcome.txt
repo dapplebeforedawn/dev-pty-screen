@@ -7,6 +7,8 @@
              Type any application command to
                   refresh the screen.
 
+                    [ctrl+z quits]
+
 
  Support:
    https://github.com/dapplebeforedawn/dev-pty-screen
