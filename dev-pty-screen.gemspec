@@ -5,7 +5,6 @@ require 'version'
 
 Gem::Specification.new do |s|
   s.name          = 'dev-pty-screen'
-  s.version       = '0.0.1'
   s.version       = DevPtyScreen::VERSION
   s.date          = '2013-10-13'
   s.summary       = 'VIM screen sharing as the neckbeards intended'
