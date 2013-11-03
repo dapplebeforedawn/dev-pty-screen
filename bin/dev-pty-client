@@ -12,7 +12,6 @@ class DevPtyClient
   CLEAR    = "\e[H\e[2J"
   SUSPEND  = ?\C-z
 
-
   def initialize
     startup_message
 
