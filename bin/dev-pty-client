@@ -25,10 +25,22 @@ class DevPtyClient
 
   def screen_loop
     -> do
-      loop { STDOUT.write @screen_sock.readpartial( READSIZE ) }
+      loop { STDOUT.write read_screen }
     end
   end
   private :screen_loop
+
+  def read_screen
+    return @screen_sock.readpartial( READSIZE )
+    rescue EOFError; disconnected
+  end
+  private :read_screen
+
+  def disconnected
+    `reset`
+    abort("The dev-pty-server has closed the session.")
+  end
+  private :disconnected
 
   def key_loop
     -> do
@@ -83,5 +95,4 @@ class DevPtyClient
   private :startup_message
 end
 
-at_exit { `reset` }
 DevPtyClient.new and sleep
