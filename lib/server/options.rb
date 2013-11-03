@@ -16,6 +16,7 @@ Example:  dev-pty-server "vim"
 Defaults:
   #{options.to_h.map{|k,v| "#{k} = #{v}"}.join("\n  ")}
 
+Options:
 HEREDOC
 
       opts.on("-k", "--key_port=val",     Integer) { |arg| options.key_port    = arg }
