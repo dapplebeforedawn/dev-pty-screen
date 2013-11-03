@@ -71,7 +71,7 @@ class DevPtyClient
   private :will_exit
 
   def wont_exit
-    print "Run any vim command to re-draw the screen."
+    print "Run any command to re-draw the screen."
     return true
   end
   private :wont_exit

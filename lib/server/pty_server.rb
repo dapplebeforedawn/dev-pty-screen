@@ -3,7 +3,7 @@ require 'io/console'
 
 require_relative 'screen_server'
 require_relative 'key_server'
-require_relative 'vim_interface'
+require_relative 'application_interface'
 require_relative 'app'
 
 Thread.abort_on_exception = true
@@ -13,12 +13,12 @@ class PtyServer
   ENTER_KEY = ?\C-m
 
   def initialize
-    @pty_m, @pty_s  = PTY.open
-    @vim_interface  = VimInterface.new @pty_m
-    @screen_server  = ScreenServer.new App.options.screen_port
-    @key_server     = KeyServer.new App.options.key_port, key_callback
-    @pty_s.winsize  = [ App.options.rows, App.options.columns ]
-    @application    = App.options.application
+    @pty_m, @pty_s         = PTY.open
+    @application_interface = ApplicationInterface.new @pty_m
+    @screen_server         = ScreenServer.new App.options.screen_port
+    @key_server            = KeyServer.new App.options.key_port, key_callback
+    @pty_s.winsize         = [ App.options.rows, App.options.columns ]
+    @application           = App.options.application
   end
 
   def start
@@ -26,13 +26,13 @@ class PtyServer
     @screen_server.listen
     @key_server.listen
     screen_loop
-    spawn_vim
+    spawn_application
   end
 
   def key_callback
     ->(key){
       print key
-      @vim_interface << key
+      @application_interface << key
     }
   end
 
@@ -44,10 +44,10 @@ class PtyServer
     end
   end
 
-  def spawn_vim
+  def spawn_application
     spawn(@application, in: @pty_s, out: @pty_s)
   end
-  private :spawn_vim
+  private :spawn_application
 
   # WTH? -- Let me 'splain:
   # There a difference between the mode that PTY
@@ -56,7 +56,7 @@ class PtyServer
   #
   # This means the cursor moves around the screen on the server
   # when you press the arrow keys, but when they are transmitted
-  # through the PTY to vim, the escape encoding is different,
+  # through the PTY to application, the escape encoding is different,
   # this results in vim just honking at you and not moving the cursor.
   #
   # By running `tput rmkx` from vim we are setting the PTY to
@@ -78,10 +78,10 @@ class PtyServer
   # That is just too cool.
   #
   def initialize_pty
-    # `printf "\033?1h\033=" > #{@pty_s.path}`
-    @vim_interface << ENTER_KEY
-    @vim_interface << ":!tput rmkx"
-    @vim_interface << ENTER_KEY
+  #   # `printf "\033?1h\033=" > #{@pty_s.path}`
+  #   @application_interface << ENTER_KEY
+  #   @application_interface << ":!tput rmkx"
+  #   @application_interface << ENTER_KEY
   end
   private :initialize_pty
 
