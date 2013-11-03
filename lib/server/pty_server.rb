@@ -22,11 +22,11 @@ class PtyServer
   end
 
   def start
-    spawn_vim
     initialize_pty
     @screen_server.listen
     @key_server.listen
     screen_loop
+    spawn_vim
   end
 
   def key_callback
@@ -46,7 +46,6 @@ class PtyServer
 
   def spawn_vim
     spawn(@application, in: @pty_s, out: @pty_s)
-    sleep 0.2 # give it a moment to boot
   end
   private :spawn_vim
 

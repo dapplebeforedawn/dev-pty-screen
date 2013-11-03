@@ -3,5 +3,5 @@
 require_relative '../lib/server/pty_server'
 Thread.abort_on_exception = true
 
-PtyServer.new.start
-sleep
+pid = PtyServer.new.start
+Process.wait(pid)
