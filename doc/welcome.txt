@@ -4,8 +4,10 @@
                Welcome to dev/pty/screen!
                --------------------------
 
-               Type any vim command to
+             Type any application command to
                   refresh the screen.
+
+                    [ctrl+z quits]
 
 
  Support:

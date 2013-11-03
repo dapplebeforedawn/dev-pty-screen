@@ -1,5 +1,5 @@
 # /dev/pty/screen
-> VIM pair programming without raster graphics.
+> Terminal pair programming without raster graphics.
 
 > Desktop sharing is for windows devs!
 
@@ -11,10 +11,10 @@
 > Yo dawg, anyone want to pair with me on my pair programming program?
 
 ## What's It Do:
-  - Only the server runs VIM (or even needs it installed for that matter).
+  - Only the server runs the application (or even needs it installed for that matter).
+  - VIM will be used for example purposes in the rest of this document, but any program can be used
   - Everyone who wishes to be part of the paring session connects to the server.
   - This is a very similar technique to what GNU Screen or TMux do.
-  - [Here's an animated demo](http://dapplebeforedawn.github.io/dev-pty-vim/)
 
 ## How's It Work:
   - The server's VIM is loaded into a pseudoterminal that is controlled by the server
@@ -22,6 +22,7 @@
   - The server then passes those on to the captive VIM
   - STDOUT from the pseudoterminal is forwarded to the server and the broadcast to cleints
   - Clients have their display updated to match the forwareded STDOUT
+  - `ctrl-z` allows clients to disconnect.
 
 ## TL;DR - An Animated Gif
 ![dev-pyt-screen](https://raw.github.com/dapplebeforedawn/dev-pty-screen/master/dev-pty-screen.gif)
@@ -51,18 +52,31 @@ or:
   - On the computer hosting the code to work on.
   ```bash
     cd /a/directory/with/some/code
-    dev-pty-server -c $COLUMNS -r $LINES
+    dev-pty-server "vim"
   ```
 
   - On each client
   ```bash
-    dev-pty-server
-
-    #program will appear to hang
-    :tabnew <cr>
+    dev-pty-client
   ```
 
   - Quitting: ^Z (ctrl+z) prompts your client to quit.  All other keys are forwarded to the server.
+
+## Another Example:
+  - Any terminal program can be used (say, the Guard your probably running with your vim)
+  ```bash
+    dev-pty-server "tail -f log/development.log"
+  ```
+
+  - On the client, for a quick log sharing session:
+  ```bash
+    dev-pty-client
+  ```
+
+  - With non-interactive programs, like tail, the clients screen will refresh when the server has new data.
+
+## Defaults:
+Since the terminal output from the server is shared with the clients directly, the number of rows/columns on the screen is set by the server.  When starting dev-pty-server, rows/columns are defaulted to the size of the terminal window housing the server.  This can be changed by using the `--rows` and `--columns` options.
 
 ## Considerations:
   This approach has a few draw-backs compared to the run-your-own-VIM tact that /dev/pty/vim uses (and a few advantages)
@@ -87,19 +101,19 @@ or:
 ## Application Structure
   ```
   ├── bin
-  │   ├── dev-pty-client        # Run this to start a client
-  │   └── dev-pty-server        # Run this to start a server
+  │   ├── dev-pty-client                # Run this to start a client
+  │   └── dev-pty-server                # Run this to start a server
   ├── lib
   │   ├── client
   │   │   ├── app.rb
-  │   │   └── options.rb        # Options parser for the client
+  │   │   └── options.rb                # Options parser for the client
   │   └── server
   │       ├── app.rb
-  │       ├── key_server.rb     # Listens for keys strokes from clients
-  │       ├── options.rb        # Options parser for the server
-  │       ├── pty_server.rb     # Manages the screen/key servers and the vim_interface
-  │       ├── screen_server.rb  # Pushes STDOUT updates to clients
-  │       └── vim_interface.rb  # Sends keystrokes to the captive VIM
+  │       ├── key_server.rb             # Listens for keys strokes from clients
+  │       ├── options.rb                # Options parser for the server
+  │       ├── pty_server.rb             # Manages the screen/key servers and the application_interface
+  │       ├── screen_server.rb          # Pushes STDOUT updates to clients
+  │       └── application_interface.rb  # Sends keystrokes to the captive VIM
   |
   ├── spec
       ├── client

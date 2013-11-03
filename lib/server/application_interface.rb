@@ -1,6 +1,6 @@
 require 'thread'
 
-class VimInterface
+class ApplicationInterface
   def initialize pty_m
     @pty_m = pty_m
     @queue = Queue.new

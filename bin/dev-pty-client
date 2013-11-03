@@ -12,7 +12,6 @@ class DevPtyClient
   CLEAR    = "\e[H\e[2J"
   SUSPEND  = ?\C-z
 
-
   def initialize
     startup_message
 
@@ -25,10 +24,22 @@ class DevPtyClient
 
   def screen_loop
     -> do
-      loop { STDOUT.write @screen_sock.readpartial( READSIZE ) }
+      loop { STDOUT.write read_screen }
     end
   end
   private :screen_loop
+
+  def read_screen
+    return @screen_sock.readpartial( READSIZE )
+    rescue EOFError; disconnected
+  end
+  private :read_screen
+
+  def disconnected
+    clear_screen
+    abort("The dev-pty-server has closed the session.")
+  end
+  private :disconnected
 
   def key_loop
     -> do
@@ -60,7 +71,7 @@ class DevPtyClient
   private :will_exit
 
   def wont_exit
-    print "Run any vim command to re-draw the screen."
+    print "Run any command to re-draw the screen."
     return true
   end
   private :wont_exit
@@ -83,5 +94,4 @@ class DevPtyClient
   private :startup_message
 end
 
-at_exit { `reset` }
 DevPtyClient.new and sleep
