@@ -36,7 +36,7 @@ class DevPtyClient
   private :read_screen
 
   def disconnected
-    `reset`
+    clear_screen
     abort("The dev-pty-server has closed the session.")
   end
   private :disconnected
