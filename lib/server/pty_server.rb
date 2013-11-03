@@ -18,6 +18,7 @@ class PtyServer
     @screen_server  = ScreenServer.new App.options.screen_port
     @key_server     = KeyServer.new App.options.key_port, key_callback
     @pty_s.winsize  = [ App.options.rows, App.options.columns ]
+    @application    = App.options.application
   end
 
   def start
@@ -44,7 +45,7 @@ class PtyServer
   end
 
   def spawn_vim
-    spawn("vim", in: @pty_s, out: @pty_s)
+    spawn(@application, in: @pty_s, out: @pty_s)
     sleep 0.2 # give it a moment to boot
   end
   private :spawn_vim
@@ -78,6 +79,7 @@ class PtyServer
   # That is just too cool.
   #
   def initialize_pty
+    # `printf "\033?1h\033=" > #{@pty_s.path}`
     @vim_interface << ENTER_KEY
     @vim_interface << ":!tput rmkx"
     @vim_interface << ENTER_KEY
